@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite para o Aniversário do Dodo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Você foi convidado(a) para o aniversário do Dodo!</h1>
+        
+        <!-- Detalhes do evento -->
+        <div class="space-y-4">
+            <p class="text-gray-700">Nos dias <span class="font-semibold">09 e 10 de Agosto de 2025</span>.</p>
+            <p class="text-gray-700">Na cidade de <span class="font-semibold">Salto de Pirapora, SP</span>.</p>
+            <p class="text-sm text-gray-500">Localização do evento enviaremos no final dessa confirmação</p>
+        </div>
+
+        <!-- Botão para confirmar presença -->
+        <div class="mt-6">
+            <a
+                href="/step1"
+                class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 block text-center">
+                Confirme aqui
+            </a>
+        </div>
+
+        <!-- Contagem regressiva (rodapé discreto) -->
+        <div class="mt-6 border-t border-gray-200 pt-4">
+            <p class="text-sm text-gray-600">Faltam:</p>
+            <div id="countdown" class="text-lg font-semibold text-gray-800">
+                <span id="days"></span>d :
+                <span id="hours"></span>h :
+                <span id="minutes"></span>m :
+                <span id="seconds"></span>s
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const eventDate = new Date("2025-08-09T10:00:00"); // Data do evento
+        const countdownElement = document.getElementById("countdown");
+
+        const interval = setInterval(() => {
+            const now = new Date();
+            const diff = eventDate - now;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("days").textContent = days;
+            document.getElementById("hours").textContent = hours;
+            document.getElementById("minutes").textContent = minutes;
+            document.getElementById("seconds").textContent = seconds;
+
+            if (diff <= 0) {
+                clearInterval(interval);
+                countdownElement.textContent = "O evento começou!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

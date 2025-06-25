@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Presença</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Confirmação de Presença</h1>
+
+        <!-- Mensagem de feedback -->
+        {{ if .IsUpdate }}
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
+                Confirmação alterada com sucesso
+            </div>
+        {{ else }}
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                Presença confirmada com sucesso!
+            </div>
+        {{ end }}
+
+        <!-- Detalhes da confirmação -->
+        <div class="space-y-4">
+            <p class="text-gray-700"><span class="font-semibold">Telefone:</span> {{ .Phone }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Adultos:</span> {{ .Adults }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Crianças:</span> {{ .Children }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Pernoite:</span> {{ .OvernightStay }}</p>
+        </div>
+
+        <!-- Mapa da localização -->
+        <div class="mt-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Localização da Festa</h2>
+            <iframe
+                class="w-full h-48 rounded-lg"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d577000.0680384631!2d-47.6319317!3d-23.3341654!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c59b50ca291b2d%3A0x1143ddce6296aaf!2sCh%C3%A1cara%20Beija%20Flor!5e1!3m2!1spt-BR!2sbr!4v1740146625489!5m2!1spt-BR!2sbr"
+                allowfullscreen
+                loading="lazy">
+            </iframe>
+        </div>
+
+        <!-- Botão para enviar localização via WhatsApp -->
+        <div class="mt-6">
+            <a
+                href="https://api.whatsapp.com/send?phone={{ .Phone }}&text=Olá! Aqui está a localização da festa: https://maps.app.goo.gl/CwZUJxumebwYj1rN9"
+                target="_blank"
+                class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 block text-center mb-4">
+                Enviar Localização via WhatsApp
+            </a>
+        </div>
+
+        <!-- Botão para fechar (redireciona para a página inicial) -->
+        <div class="mt-4">
+            <button
+                onclick="window.location.href='/thanks'"
+                class="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 block text-center">
+                Fechar
+            </button>
+        </div>
+        <!-- Contagem regressiva (rodapé discreto) -->
+        <div class="mt-6 border-t border-gray-200 pt-4">
+            <p class="text-sm text-gray-600">Faltam:</p>
+            <div id="countdown" class="text-lg font-semibold text-gray-800">
+                <span id="days"></span>d :
+                <span id="hours"></span>h :
+                <span id="minutes"></span>m :
+                <span id="seconds"></span>s
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const eventDate = new Date("2025-08-09T00:00:00"); // Data do evento
+        const countdownElement = document.getElementById("countdown");
+    
+        const interval = setInterval(() => {
+            const now = new Date();
+            const diff = eventDate - now;
+    
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+            document.getElementById("days").textContent = days;
+            document.getElementById("hours").textContent = hours;
+            document.getElementById("minutes").textContent = minutes;
+            document.getElementById("seconds").textContent = seconds;
+    
+            if (diff <= 0) {
+                clearInterval(interval);
+                countdownElement.textContent = "O evento começou!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
