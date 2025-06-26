@@ -17,12 +17,15 @@ if [ ! -f "$FILE" ]; then
     exit 1
 fi
 
+cat $FILE | sed 's/^\[//; s/\]$//; s/},/}/g' > contatos_formatados.json
+
 # Executa mongoimport dentro de um contêiner Docker
 docker run --rm -v "$(pwd):/data" mongo:latest mongoimport \
   --uri "$MONGO_URI" \
   --db "$DATABASE" \
   --collection "$COLLECTION" \
   --type json \
-  --file /data/"$FILE"
-
-echo "✅ Importação concluída com sucesso!"
+  --file /data/contatos_formatados.json
+  
+  rm contatos_formatados.json
+  echo "✅ Importação concluída com sucesso!"
