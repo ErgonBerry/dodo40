@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-7xl">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
 
         <!-- Formulário para adicionar convidados -->
@@ -37,18 +37,72 @@
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
                     <tr>
-                        <th class="px-4 py-2 border-b">Telefone</th>
                         <th class="px-4 py-2 border-b">Nome</th>
+                        <th class="px-4 py-2 border-b">Telefone</th>
+                        <th class="px-4 py-2 border-b">Status</th>
+                        <th class="px-4 py-2 border-b">Adultos</th>
+                        <th class="px-4 py-2 border-b">Crianças</th>
+                        <th class="px-4 py-2 border-b">Pernoite</th>
+                        <th class="px-4 py-2 border-b">Easter Egg</th>
+                        <th class="px-4 py-2 border-b">IP</th>
                         <th class="px-4 py-2 border-b">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{ range .Guests }}
                     <tr>
-                        <td class="px-4 py-2 border-b">{{ .Phone }}</td>
                         <td class="px-4 py-2 border-b">{{ .Name }}</td>
+                        <td class="px-4 py-2 border-b">{{ .Phone }}</td>
                         <td class="px-4 py-2 border-b">
-                            <form action="/admin/delete" method="POST" class="inline">
+                            {{ if .Confirmed }}
+                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Confirmado</span>
+                            {{ else }}
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Pendente</span>
+                            {{ end }}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            {{ if .Confirmed }}
+                                {{ .Adults }}
+                            {{ else }}
+                                <span class="text-gray-400">-</span>
+                            {{ end }}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            {{ if .Confirmed }}
+                                {{ .Children }}
+                            {{ else }}
+                                <span class="text-gray-400">-</span>
+                            {{ end }}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            {{ if .Confirmed }}
+                                {{ if eq .OvernightStay "sim" }}
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Sim</span>
+                                {{ else if eq .OvernightStay "nao" }}
+                                    <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">Não</span>
+                                {{ else }}
+                                    <span class="text-gray-400">-</span>
+                                {{ end }}
+                            {{ else }}
+                                <span class="text-gray-400">-</span>
+                            {{ end }}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            {{ if .EasterEgg }}
+                                <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">🥚 Sim</span>
+                            {{ else }}
+                                <span class="text-gray-400">-</span>
+                            {{ end }}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            {{ if .Confirmed }}
+                                <span class="text-xs text-gray-500">{{ .IP }}</span>
+                            {{ else }}
+                                <span class="text-gray-400">-</span>
+                            {{ end }}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            <form action="/admin/delete" method="POST" class="inline" onsubmit="return confirm('Tem certeza que deseja remover {{ .Name }}?')">
                                 <input type="hidden" name="phone" value="{{ .Phone }}">
                                 <button type="submit" class="text-red-500 hover:text-red-700">Remover</button>
                             </form>
