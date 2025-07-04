@@ -28,6 +28,10 @@ type Guest struct {
     EasterEgg     bool   `bson:"easterEgg"` // Novo campo
 }
 
+func formatPhoneNumber(phone string) string {
+	return "+55" + phone
+}
+
 func getTotals() (totalAdults int, totalChildren int, err error) {
     // Pipeline de agregação
     pipeline := []bson.M{
@@ -101,6 +105,7 @@ func main() {
 
 	// Configurar o template engine
 	engine := html.New("./templates", ".html")
+	engine.AddFunc("formatPhoneNumber", formatPhoneNumber)
 
 	// Inicializar o Fiber
 	app := fiber.New(fiber.Config{
